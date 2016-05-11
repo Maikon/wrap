@@ -5,28 +5,21 @@ defmodule Wrap do
     do_wrap(col_number, "", list_of_words)
   end
 
-  defp do_wrap(_col_number, result, []), do: result
-  defp do_wrap(col_number, result, [word | rest]) do
+  defp do_wrap(_word_boundary, result, []), do: String.strip(result) <> "\n"
+  defp do_wrap(word_boundary, result, [word | rest]) do
 
     lines = String.split(result, "\n")
     current_line_size = List.last(lines) |> String.length
     attempted_line = current_line_size + String.length(word)
-    # updated_text = result <> word
 
     cond do
-      length(rest) == 0 ->
-        updated_text = result <> word
-        if String.ends_with?(updated_text, " ") do
-          do_wrap(col_number, String.replace_trailing(updated_text, " ", "\n"), rest)
-        else
-          do_wrap(col_number, updated_text, rest)
-        end
-      attempted_line > col_number ->
-        do_wrap(col_number, String.replace_trailing(result, " ", "\n") <> word <> " ", rest)
-      attempted_line == col_number ->
-        do_wrap(col_number, result <> word <> "\n", rest)
-      attempted_line < col_number ->
-        do_wrap(col_number, result <> word <> " ", rest)
+      attempted_line > word_boundary ->
+        do_wrap(word_boundary, String.replace_trailing(result, " ", "\n") <> word <> " ", rest)
+      attempted_line == word_boundary ->
+        do_wrap(word_boundary, result <> word <> "\n", rest)
+      attempted_line < word_boundary ->
+        do_wrap(word_boundary, result <> word <> " ", rest)
     end
   end
 end
+

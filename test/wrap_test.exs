@@ -1,16 +1,8 @@
 defmodule WrapTest do
   use ExUnit.Case
 
-  test "empty string remains the same" do
-    assert Wrap.wrap("", 5)  == ""
-  end
-
   test "wraps a single word" do
-    assert Wrap.wrap("word", 4) == "word"
-  end
-
-  test "replace trailing space with new line" do
-    assert Wrap.wrap("word ", 3) == "word\n"
+    assert Wrap.wrap("word", 4) == "word\n"
   end
 
   test "column number is greater than text returns text with new line" do
@@ -18,18 +10,26 @@ defmodule WrapTest do
   end
 
   test "wraps two words" do
-    assert Wrap.wrap("word word", 4) == "word\nword"
+    assert Wrap.wrap("word word", 4) == "word\nword\n"
   end
 
   test "wraps three words" do
-    assert Wrap.wrap("word word word", 9) == "word word\nword"
+    assert Wrap.wrap("word word word", 9) == "word word\nword\n"
   end
 
   test "wraps four words" do
-    assert Wrap.wrap("word word word word", 14) == "word word word\nword"
+    assert Wrap.wrap("word word word word", 14) == "word word word\nword\n"
   end
 
   test "does not split words" do
-    assert Wrap.wrap("word word word", 6) == "word\nword word"
+    assert Wrap.wrap("word word word", 6) == "word\nword\nword\n"
+  end
+
+   test "splits odd number of words" do
+     assert Wrap.wrap("word word word", 11) == "word word\nword\n"
+   end
+
+  test "splits even number of words" do
+    assert Wrap.wrap("word word word word", 11) == "word word\nword word\n"
   end
 end
